@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QFrame, QVBoxLayout, QDialog, QLabel, QTableWidget, QTableWidgetItem, QHBoxLayout, QPushButton, QStackedWidget, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QDialog, QLabel, QTableWidget, QTableWidgetItem, QHBoxLayout, QPushButton, QStackedWidget, QWidget, QSpacerItem,QSizePolicy 
 from PyQt5 import QtCore
 
 
@@ -14,58 +14,80 @@ TABLE_COLUMN_NUMBER = 5
 class PlotSettings(QDialog):
     def __init__(self):
         super().__init__()
-        
-        self.resize(700, 700)
-        self.vbox_layout_1_display = QVBoxLayout(self)
-        self.first_frame_display = QFrame(self)
-        self.hbox_layout_1_plot = QHBoxLayout(self.first_frame_display)
-        self.frame_plot_button = QFrame(self.first_frame_display)
-        self.hbox_layout_1_plot.addWidget(self.frame_plot_button)
-        self.frame_plot_stack = QFrame(self.first_frame_display)
-        self.hbox_layout_1_plot.addWidget(self.frame_plot_stack)
-        self.vbox_layout_1_display.addWidget(self.first_frame_display)
-        self.controll_button_frame = QFrame(self)
-        self.vbox_layout_1_display.addWidget(self.controll_button_frame)
-        self.ok_button = QPushButton(self.controll_button_frame)
-        self.ok_button.setText('OK')
-        self.cancle_button = QPushButton(self.controll_button_frame)
-        self.cancle_button.setText('Cancle')
-        self.hbox_layout_2_plot = QHBoxLayout(self.controll_button_frame)
-        self.hbox_layout_2_plot.addWidget(self.ok_button)
-        self.hbox_layout_2_plot.addWidget(self.cancle_button)
-        #plot button 
-        self.plot_button_v_layout = QVBoxLayout()
-        self.frame_plot_button_v_layout = QVBoxLayout(self.frame_plot_button)
-        self.frame_plot_button_v_layout.addLayout(self.plot_button_v_layout)
+        self.resize(1150, 700)
+        self.verticalLayout_3 = QVBoxLayout(self)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
 
-        self.global_button = QPushButton(self.frame_plot_button)
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        #self.verticalLayout.setSizeConstraint(QLayout.SetNoConstraint)
+
+        self.global_button = QPushButton(self)
         self.global_button.setText('global button')
         self.global_button.setObjectName('global page')
-        self.plot_button_v_layout.addWidget(self.global_button)
+        self.verticalLayout.addWidget(self.global_button)
 
-        #statcked widgets 
-        self.frame_plot_stack_vlayout = QVBoxLayout(self.frame_plot_stack)
+        self.horizontalLayout.addLayout(self.verticalLayout)
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setSpacing(6)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
+
+        self.ok_button = QPushButton(self)
+        self.ok_button.setText('OK')
+        self.cancle_button = QPushButton(self)
+        self.cancle_button.setText('Cancle')
         
-        
+
+        self.horizontalLayout_2.addWidget(self.ok_button)
+        self.horizontalLayout_2.addWidget(self.cancle_button)
+       
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+
+
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+
     def determine_plot_buttons(self, number_of_plots, titles):
-        self.plot_buttons = [QPushButton(self.frame_plot_button) for _ in range(len(number_of_plots))]
+        self.plot_buttons = [QPushButton(self) for _ in range(len(number_of_plots))]
         [button.setObjectName(title) for button, title in zip(self.plot_buttons, titles)]
-        [self.plot_button_v_layout.addWidget(plot_button) for plot_button in self.plot_buttons]
-    
+        
+        [self.verticalLayout.addWidget(plot_button) for plot_button in self.plot_buttons]
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalLayout.addItem(self.verticalSpacer)
+        #self.vbox_layout_form.addLayout(self.button_layout)
+        
+
     def determine_plot_stack_widgets(self, number_of_plots, titles):
-        self.plot_stack_widget = QStackedWidget(self.frame_plot_stack)
+        self.plot_stack_widget = QStackedWidget()
         self.pages = [ QWidget() for _ in range(number_of_plots)]
         [page.setObjectName(title) for page, title in zip(self.pages, titles)]
         [self.plot_stack_widget.addWidget(page) for page in self.pages]
-        self.frame_plot_stack_vlayout.addWidget(self.plot_stack_widget)
         self.page_layouts = [QVBoxLayout(page) for page in self.pages]
+
+        self.horizontalLayout.addWidget(self.plot_stack_widget)
 
     def add_global_page(self):
         self.global_page = QWidget()
         self.plot_stack_widget.addWidget(self.global_page)
         self.global_page.setObjectName('global page')
         self.global_page_layout = QVBoxLayout(self.global_page)
-        
+        self.global_label = QLabel(self.global_page)
+        self.global_label.setText('Plot attribute summary')
+        self.global_page_layout.addWidget(self.global_label, 0, QtCore.Qt.AlignHCenter)
+
     def add_label_to_widgets(self):
         self.labes = [QLabel(page) for page in self.pages]
         [layout.addWidget(lable, 0, QtCore.Qt.AlignHCenter)for layout, lable in zip(self.page_layouts, self.labes)]
@@ -74,7 +96,7 @@ class PlotSettings(QDialog):
         [label.setText(title+'_plot') for label, title in zip(self.labes, titles)]
     
     def button_click_action(self):
-        button_acitons = [button.clicked.connect(self.change_page) for button in self.plot_buttons]
+        [button.clicked.connect(self.change_page) for button in self.plot_buttons]
         self.global_button.clicked.connect(self.global_page_change)
 
     def change_page(self):
@@ -186,10 +208,3 @@ class PlotSettings(QDialog):
     def get_value_from_gui(self, tabel_widget_diplay, col, sensor_name):
         return [tabel_widget_diplay.item(row, col).text() for row  in range(len(sensor_name)) ]
 
-
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     window = PlotSettings()   
-#     window.show()
-    
-#     sys.exit(app.exec_())

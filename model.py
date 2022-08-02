@@ -9,9 +9,7 @@ class PlostSettingController(PlotSettings):
         PlotSettings.__init__(self)
         self.display_setting = DisplaySettings(setup_file_path=setup_file_path)
         self.plot_titles = self.display_setting.get_plot_names()
-
         self.determine_plot_buttons(self.display_setting.plot_values, self.plot_titles)
-
         self.determine_plot_stack_widgets(len(self.display_setting.plot_values), self.plot_titles)
         self.add_label_to_widgets()
         self.add_title(self.plot_titles)
